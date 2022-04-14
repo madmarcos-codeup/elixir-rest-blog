@@ -22,8 +22,13 @@ public class PostsController {
 
     // GET /api/posts/5  <-- fetch the blog post with id 5
     @GetMapping("{postId}")
-    public Post getById(@PathVariable Long postId){
+    private Post getById(@PathVariable Long postId){
         Post post = new Post(postId, "Post " + postId, "Blah blah blah");
         return post;
+    }
+
+    @PostMapping
+    private void createPost(@RequestBody Post newPost) {
+        System.out.println("Ready to add post: " + newPost);
     }
 }
