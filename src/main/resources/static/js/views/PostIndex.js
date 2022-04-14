@@ -1,3 +1,6 @@
+import createView from "../createView.js";
+const BASE_URI = 'http://localhost:8081/api/posts';
+
 export default function PostIndex(props) {
     return `
         <header>
@@ -49,13 +52,29 @@ function createAddPostListener() {
             content: $("#add-post-content").val()
         }
         const id = $("#add-post-id").val();
+        const request = {};
         if(id > 0) {
             newPost.id = id;
+            request.method = "PUT";
             console.log("Ready to update this post:");
         } else {
+            newPost.id = 99999;
+            request.method = "POST";
             console.log("Ready to add this post:");
         }
-        console.log(newPost);
+        request.headers = {
+            'Content-Type`': 'application/json',
+            body: JSON.stringify(newPost)
+        };
+        // console.log(newPost);
+        fetch(`${BASE_URI}/${id}`, request)
+            .then(res => {
+            console.log(`${request.method} SUCCESS: ${res.status}`);
+        }).catch(error => {
+            console.log(`${request.method} ERROR: ${error}`);
+        }).finally(() => {
+            createView("/posts");
+        });
     });
 }
 
@@ -74,5 +93,20 @@ function createDeletePostListeners() {
     $(".delete-post-button").click(function() {
         const id = $(this).data("id");
         console.log("Ready to delete the post with id " + id);
+
+        const request = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+        fetch(`${BASE_URI}/${id}`, request)
+            .then(res => {
+                console.log("DELETE SUCCESS: " + res.status);
+            }).catch(error => {
+            console.log("DELETE ERROR: " + error);
+        }).finally(() => {
+            createView("/posts");
+        });
     });
 }
