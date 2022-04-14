@@ -12,7 +12,7 @@ export default function PostIndex(props) {
                 ${props.posts.map(post => {
                     return `<div>
 <h4 id="title-${post.id}">${post.title}</h4>
-<input type="hidden" id="content-${post.id}" value="${post.content}">
+<p id="content-${post.id}">${post.content}</p>
 <span><a href="#" class="edit-post-button" data-id="${post.id}">Edit</a></span>
 <span><a href="#" class="delete-post-button" data-id="${post.id}">Delete</a></span>
 </div>`;            
