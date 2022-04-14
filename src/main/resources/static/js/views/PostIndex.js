@@ -53,9 +53,11 @@ function createAddPostListener() {
         }
         const id = $("#add-post-id").val();
         const request = {};
+        let uriExtra = "";
         if(id > 0) {
             newPost.id = id;
             request.method = "PUT";
+            uriExtra = `/${id}`;
             console.log("Ready to update this post:");
         } else {
             newPost.id = 99999;
@@ -63,11 +65,10 @@ function createAddPostListener() {
             console.log("Ready to add this post:");
         }
         request.headers = {
-            'Content-Type`': 'application/json',
-            body: JSON.stringify(newPost)
+            'Content-Type': 'application/json'
         };
-        // console.log(newPost);
-        fetch(`${BASE_URI}/${id}`, request)
+        request.body = JSON.stringify(newPost);
+        fetch(`${BASE_URI}${uriExtra}`, request)
             .then(res => {
             console.log(`${request.method} SUCCESS: ${res.status}`);
         }).catch(error => {
