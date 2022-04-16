@@ -1,13 +1,15 @@
 import createView from "../createView.js";
+
 const BASE_URI = 'http://localhost:8081/api/posts';
 
 export default function PostIndex(props) {
+    // language=HTML
     return `
         <header>
             <h1>Posts Page</h1>
         </header>
         <main>
-<h3>Posts (make this a sweet table!)</h3>
+            <h3>Posts (make this a sweet table!)</h3>
             <div id="posts-container">
                 ${props.posts.map(post => {
                     return `<div>
@@ -15,26 +17,29 @@ export default function PostIndex(props) {
 <p id="content-${post.id}">${post.content}</p>
 <span><a href="#" class="edit-post-button" data-id="${post.id}">Edit</a></span>
 <span><a href="#" class="delete-post-button" data-id="${post.id}">Delete</a></span>
-</div>`;            
-                }).join('')}   
+</div>`;
+                }).join('')}
             </div>
-<hr>
+            <hr>
             <h3>Add a Post</h3>
             <form id="add-post-form">
-            <div class="mb-3">
-  <input disabled type="text" class="form-control" id="add-post-id" value="0">
-</div>
-            <div class="mb-3">
-  <label for="add-post-title" class="form-label">Title</label>
-  <input type="text" class="form-control" id="add-post-title" placeholder="Post title">
-</div>
-  <label for="add-post-content" class="form-label">Content</label>
-  <textarea class="form-control" id="add-post-content" rows="3" placeholder="Post content"></textarea>
-</div>
-<br>
-<button id="clear-post-button" type="submit" class="btn btn-primary mb-3" onclick="document.querySelector('#add-post-id').value = 0; document.querySelector('#add-post-title').value = ''; document.querySelector('#add-post-content').value = '';">Clear</button>
-<button id="add-post-button" type="submit" class="btn btn-primary mb-3">Submit</button>
-</form>
+                <div class="mb-3">
+                    <input disabled type="text" class="form-control" id="add-post-id" value="0">
+                </div>
+                <div class="mb-3">
+                    <label for="add-post-title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="add-post-title" placeholder="Post title">
+                </div>
+                <label for="add-post-content" class="form-label">Content</label>
+                <textarea class="form-control" id="add-post-content" rows="3" placeholder="Post content"></textarea>
+                </div>
+                <br>
+                <button id="clear-post-button" type="submit" class="btn btn-primary mb-3"
+                        onclick="document.querySelector('#add-post-id').value = 0; document.querySelector('#add-post-title').value = ''; document.querySelector('#add-post-content').value = '';">
+                    Clear
+                </button>
+                <button id="add-post-button" type="submit" class="btn btn-primary mb-3">Submit</button>
+            </form>
         </main>
     `;
 }

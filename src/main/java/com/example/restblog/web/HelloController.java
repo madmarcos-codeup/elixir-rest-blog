@@ -14,6 +14,12 @@ public class HelloController {
         return "Hello from Spring!";
     }
 
+    @GetMapping("/hello/{personName}")
+    @ResponseBody
+    public String sayHello(@PathVariable String personName) {
+        return "Hello, " + personName + "!";
+    }
+
     @GetMapping("/increment/{number}")
     @ResponseBody
     public String addOne(@PathVariable int number) {
