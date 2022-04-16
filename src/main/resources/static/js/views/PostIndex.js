@@ -83,7 +83,7 @@ function createEditPostListeners() {
     $(".edit-post-button").click(function() {
         const id = $(this).data("id");
         const oldTitle = $(`#title-${id}`).html();
-        const oldContent = $(`#content-${id}`).val();
+        const oldContent = $(`#content-${id}`).text();
         $("#add-post-id").val(id);
         $("#add-post-title").val(oldTitle);
         $("#add-post-content").val(oldContent);
