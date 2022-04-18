@@ -15,8 +15,10 @@ export default function UserIndex(props) {
                 <input disabled id="username" name="username" value="${props.users.username}" type="text"/>
                 <label for="email">Email</label>
                 <input disabled id="email" name="email" type="email" value="${props.users.email}">
-                <label for="password">Password</label>
-                <input id="password" name="password" type="password" value="this is not your real password"/>
+                <label for="old-password">Old Password</label>
+                <input disabled id="old-password" name="old-password" type="password" value="this is not your real password"/>
+                <label for="new-password">New Password</label>
+                <input id="new-password" name="new-password" type="password" value="this is not your real password"/>
                 <button id="change-password-button" type="button">Change Password</button>
             </form>
         </main>
@@ -26,22 +28,17 @@ export default function UserIndex(props) {
 export function UserEvents() {
     $("#change-password-button").click(function() {
         const id = 1; // $("#add-post-id").val();
-        let uriExtra = '/1/password';
-        const updatedUser = {
-            id: id,
-            password: $("#password").val()
-        }
+        let uriExtra = '/1/updatePassword';
+        const oldPassword = $("#old-password").val()
+        const newPassword = $("#new-password").val()
+
         const request = {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedUser)
+            }
         }
-        console.log("Ready to change this user:");
-        console.log(updatedUser);
-
-        fetch(`${BASE_URI}${uriExtra}`, request)
+        fetch(`${BASE_URI}${uriExtra}?oldPassword=${oldPassword}&newPassword=${newPassword}`, request)
             .then(res => {
                 console.log(`${request.method} SUCCESS: ${res.status}`);
             }).catch(error => {

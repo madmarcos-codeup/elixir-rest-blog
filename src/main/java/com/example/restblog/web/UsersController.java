@@ -48,9 +48,9 @@ public class UsersController {
         System.out.printf("Backend wants to update user id %d with %s\n", userId, updatedUser);
     }
 
-    @PutMapping("{userId}/password")
-    private void updateUserPassword(@PathVariable Long userId, @RequestBody User updatedUser) {
-        System.out.printf("Backend wants to update user password for id %d with %s\n", userId, updatedUser);
+    @PutMapping("{userId}/updatePassword")
+    private void updateUserPassword(@PathVariable Long userId, @RequestParam(required = false) String oldPassword, @RequestParam String newPassword) {
+        System.out.printf("Backend wants to update user password for id %d with old pw %s new pw %s\n", userId, oldPassword, newPassword);
     }
 
     @DeleteMapping("{userId}")
