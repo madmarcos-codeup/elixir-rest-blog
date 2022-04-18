@@ -26,14 +26,31 @@ public class UsersController {
         return user;
     }
 
+    @GetMapping("username")
+    private User getByUsername(@RequestParam String userName) {
+        User user = new User(1L, userName, "user@bigfatuser.com", "1234", null, User.Role.USER);
+        return user;
+    }
+
+    @GetMapping("email")
+    private User getByEmail(@RequestParam String email) {
+        User user = new User(1L, "big fat user", email, "1234", null, User.Role.USER);
+        return user;
+    }
+
     @PostMapping
     private void createUser(@RequestBody User newUser) {
         System.out.println("Backend wants to create: " + newUser);
     }
 
     @PutMapping("{userId}")
-    private void updateUser(@PathVariable Long userId, @RequestBody User newUser) {
-        System.out.printf("Backend wants to update user id %d with %s\n", userId, newUser);
+    private void updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
+        System.out.printf("Backend wants to update user id %d with %s\n", userId, updatedUser);
+    }
+
+    @PutMapping("{userId}/password")
+    private void updateUserPassword(@PathVariable Long userId, @RequestBody User updatedUser) {
+        System.out.printf("Backend wants to update user password for id %d with %s\n", userId, updatedUser);
     }
 
     @DeleteMapping("{userId}")
