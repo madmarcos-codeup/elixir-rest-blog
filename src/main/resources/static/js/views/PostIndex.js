@@ -52,20 +52,25 @@ export function PostEvents() {
 
 function createAddPostListener() {
     $("#add-post-button").click(function() {
+        // create the post body that will become the request body
         const newPost = {
             title: $("#add-post-title").val(),
             content: $("#add-post-content").val()
         }
+
+        // we use id to know if this is add or edit
         const id = $("#add-post-id").val();
+
+        // make the request
         const request = {};
         let uriExtra = "";
         if(id > 0) {
-            newPost.id = id;
+            // newPost.id = id; // don't need this for a put
             request.method = "PUT";
             uriExtra = `/${id}`;
             console.log("Ready to update this post:");
         } else {
-            newPost.id = 99999;
+            // newPost.id = 99999; // this doesn't need to be there
             request.method = "POST";
             console.log("Ready to add this post:");
         }
@@ -86,9 +91,14 @@ function createAddPostListener() {
 
 function createEditPostListeners() {
     $(".edit-post-button").click(function() {
+        // get the id of the blog post, stored as the button's data-id attribute
         const id = $(this).data("id");
+
+        // get the title and content associated with the blog post
         const oldTitle = $(`#title-${id}`).html();
         const oldContent = $(`#content-${id}`).text();
+
+        // set add form fields with existing blog post data
         $("#add-post-id").val(id);
         $("#add-post-title").val(oldTitle);
         $("#add-post-content").val(oldContent);
@@ -97,14 +107,13 @@ function createEditPostListeners() {
 
 function createDeletePostListeners() {
     $(".delete-post-button").click(function() {
+        // grab the id of the post to be deleted
         const id = $(this).data("id");
         console.log("Ready to delete the post with id " + id);
 
+        // make the request
         const request = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            method: 'DELETE'
         };
         fetch(`${BASE_URI}/${id}`, request)
             .then(res => {
