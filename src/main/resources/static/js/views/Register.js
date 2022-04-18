@@ -1,6 +1,7 @@
 import CreateView from "../createView.js"
 
 export default function Register(props) {
+    // language=HTML
     return `
     <!DOCTYPE html>
         <html>
@@ -28,6 +29,7 @@ export default function Register(props) {
 export function RegisterEvent(){
     $("#register-btn").click(function(){
 
+        // make a new user object from the provided fields
         let newUser = {
             username: $("#username").val(),
             email: $("#email").val(),
