@@ -13,10 +13,10 @@ import java.util.Date;
 public class User {
     public enum Role {USER, ADMIN}
 
-    Long id;
-    String username;
-    String email;
-    String password;
-    LocalDate createdAt;
-    Role role;
+    private Long id;
+    private String username;
+    private String email;
+    private String password;
+    private LocalDate createdAt;
+    private Role role;
 }
