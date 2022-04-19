@@ -6,13 +6,11 @@ import java.util.Collection;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class Post {
+public class Category {
     private Long id;
-    private String title;
-    private String content;
-    private User author;
-    private Collection<Category> categories;
+    private String name;
+    private Collection<Post> posts;
 }
