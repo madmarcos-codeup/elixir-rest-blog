@@ -1,6 +1,9 @@
-import CreateView from "../createView.js"
+import createView from "../createView.js"
+
+const BASE_URI = 'http://localhost:8081/api/users';
 
 export default function Register(props) {
+    // language=HTML
     return `
     <!DOCTYPE html>
         <html>
@@ -28,6 +31,7 @@ export default function Register(props) {
 export function RegisterEvent(){
     $("#register-btn").click(function(){
 
+        // make a new user object from the provided fields
         let newUser = {
             username: $("#username").val(),
             email: $("#email").val(),
@@ -36,16 +40,17 @@ export function RegisterEvent(){
 
         console.log(newUser);
 
+        // make the request to send to the backend
         let request = {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(newUser)
         }
 
-        fetch("http://localhost:8080/api/users", request)
+        fetch(BASE_URI, request)
             .then(response => {
                 console.log(response.status);
-                CreateView("/");
+                createView("/");
             })
 
     })
