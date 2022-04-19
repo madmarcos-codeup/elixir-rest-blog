@@ -15,6 +15,7 @@ export default function PostIndex(props) {
                     return `<div>
 <h4 id="title-${post.id}">${post.title}</h4>
 <p id="content-${post.id}">${post.content}</p>
+<p id="author-${post.id}">Author: ${post.author.username}</p>
 <span><a href="#" class="edit-post-button" data-id="${post.id}">Edit</a></span>
 <span><a href="#" class="delete-post-button" data-id="${post.id}">Delete</a></span>
 </div>`;

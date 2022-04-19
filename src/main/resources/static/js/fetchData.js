@@ -5,17 +5,18 @@
  * @param request
  * @returns {Promise<{}>}
  */
+const BASE_URI = "http://localhost:8081";
+
 export default function fetchData(state, request) {
     const promises = [];
     //TODO: this needs to be moved to a prop file or env variable
-    const baseUri = "http://localhost:8081";
 
     console.log("got to fetch data");
     console.log(request);
     for (let pieceOfState of Object.keys(state)) {
-        console.log(baseUri + state[pieceOfState]);
+        console.log(BASE_URI + state[pieceOfState]);
         promises.push(
-            fetch(baseUri + state[pieceOfState], request)
+            fetch(BASE_URI + state[pieceOfState], request)
                 .then(function (res) {
                     return res.json();
                 }));
