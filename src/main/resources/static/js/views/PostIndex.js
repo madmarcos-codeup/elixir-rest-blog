@@ -2,6 +2,11 @@ import createView from "../createView.js";
 
 const BASE_URI = 'http://localhost:8081/api/posts';
 
+// REPLACE WHEN RELATIONSHIP IS CREATED
+// <span style="float:right" id="author-${post.id}">Author: ${post.author.username}</span>
+// ${post.categories.map(category => {
+//             return `<span class="border border-primary rounded">${category.name}</span>`
+//                 }).join('')}
 export default function PostIndex(props) {
     // language=HTML
     return `
@@ -16,15 +21,11 @@ export default function PostIndex(props) {
 <div class="card">
     <h4 class="card-header">
         <span id="title-${post.id}">${post.title}</span>
-        <span style="float:right" id="author-${post.id}">Author: ${post.author.username}</span>
     </h4>
     <div class="card-body">
         <p id="content-${post.id}" class="card-text">${post.content}</p>
     </div>
     <div class="card-footer text-muted">            
-        ${post.categories.map(category => {
-                    return `<span class="border border-primary rounded">${category.name}</span>`
-                }).join('')}
         <span><a href="#" class="edit-post-button" data-id="${post.id}">Edit</a></span>
         <span><a href="#" class="delete-post-button" data-id="${post.id}">Delete</a></span>
     </div>

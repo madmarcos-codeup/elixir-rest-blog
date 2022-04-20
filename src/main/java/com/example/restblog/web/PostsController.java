@@ -24,15 +24,13 @@ public class PostsController {
 
     @GetMapping
     private List<Post> getAll() {
-        List<Post> posts = new ArrayList<>();
-        return posts;
+        return postsRepository.findAll();
     }
 
-//    @GetMapping("{postId}")
-//    private Post getById(@PathVariable Long postId) {
-//        Post post = new Post(postId, "Post " + postId, "This is a test post", USER3, Arrays.asList(CAT1, CAT2));
-//        return post;
-//    }
+    @GetMapping("{postId}")
+    private Post getById(@PathVariable Long postId) {
+        return postsRepository.getById(postId);
+    }
 
     @PostMapping
     private void createPost(@RequestBody Post newPost) {
@@ -43,12 +41,17 @@ public class PostsController {
 
     @PutMapping("{postId}")
     private void updatePost(@PathVariable Long postId, @RequestBody Post newPost) {
-        System.out.printf("Backend wants to update post id %d with %s\n", postId, newPost);
+        Post postToUpdate = postsRepository.getById(postId);
+        postToUpdate.setTitle(newPost.getTitle());
+        postToUpdate.setContent(newPost.getContent());
+        postsRepository.save(postToUpdate);
+        System.out.println("Post updated!");
     }
 
     @DeleteMapping("{postId}")
     private void deletePost(@PathVariable Long postId) {
-        System.out.printf("Backend wants to delete post id %d\n", postId);
+        Post postToDelete = postsRepository.getById(postId);
+        postsRepository.delete(postToDelete);
     }
 
 }
