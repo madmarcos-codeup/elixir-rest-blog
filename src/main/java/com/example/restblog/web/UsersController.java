@@ -1,8 +1,6 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Category;
-import com.example.restblog.data.Post;
-import com.example.restblog.data.User;
+import com.example.restblog.data.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,6 +11,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UsersController {
+    private final UsersRepository userRepository;
+
     private static final Category CAT1 = new Category(1L, "CAT 1", null);
     private static final Category CAT2 = new Category(2L, "CAT 2", null);
     private static final Category CAT3 = new Category(3L, "CAT 3", null);
@@ -24,19 +24,18 @@ public class UsersController {
     private static final Post POST5 = new Post(5L, "Post 5", "Blah", null, Arrays.asList(CAT2, CAT3));
     private static final Post POST6 = new Post(6L, "Post 6", "Blah", null, Arrays.asList(CAT1, CAT3));
 
+    public UsersController(UsersRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @GetMapping
     private List<User> getAll() {
-        List<User> users = new ArrayList<>();
-        users.add(new User(1L, "bob smith", "bob@smith.com", "1234", null, User.Role.USER, Arrays.asList(POST1, POST2)));
-        users.add(new User(2L, "tom jones", "tom@jones.com", "5678", null, User.Role.ADMIN, Arrays.asList(POST3, POST4)));
-        users.add(new User(3L, "jane williams", "jane@williams.com", "9000", null, User.Role.USER, Arrays.asList(POST5, POST6)));
-        return users;
+        return userRepository.findAll();
     }
 
     @GetMapping("{userId}")
     private User getById(@PathVariable Long userId) {
-        User user = new User(userId, "bob smith", "bob@smith.com", "1234", null, User.Role.USER, Arrays.asList(POST1, POST2));
-        return user;
+        return userRepository.getById(userId);
     }
 
     @GetMapping("username")

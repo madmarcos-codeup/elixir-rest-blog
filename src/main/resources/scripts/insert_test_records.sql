@@ -1,6 +1,6 @@
 INSERT INTO users (username, password, email, role) VALUES ('test_user', 'test123', 'test@test.com', 'USER');
 
-INSERT INTO posts (user_id, title, content) VALUES (1, 'Babys First Post', 'Do not be alarmed. This is only a test.');
+INSERT INTO posts (author_id, title, content) VALUES (1, 'Babys First Post', 'Do not be alarmed. This is only a test.');
 
 INSERT INTO tags (name) VALUES ('test_tag');
 
