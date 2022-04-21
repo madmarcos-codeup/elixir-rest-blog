@@ -1,6 +1,7 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.*;
+import com.example.restblog.services.EmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -17,6 +18,7 @@ public class PostsController {
     private final PostsRepository postRepository;
     private final UsersRepository userRepository;
     private final CategoriesRepository categoriesRepository;
+    private final EmailService emailService;
 
     @GetMapping
     private List<Post> getAll() {
@@ -37,6 +39,8 @@ public class PostsController {
                 categoriesRepository.getById(2L),
                 categoriesRepository.getById(3L)));
         postRepository.save(newPost);
+
+        emailService.prepareAndSend(newPost, "New post!", "Hi there. You made a new post!");
     }
 
     @PutMapping("{postId}")
