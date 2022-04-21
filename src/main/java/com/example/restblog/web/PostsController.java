@@ -6,9 +6,8 @@ import com.example.restblog.data.PostsRepository;
 import com.example.restblog.data.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -34,8 +33,8 @@ public class PostsController {
     }
 
     @GetMapping("{postId}")
-    private Post getById(@PathVariable Long postId) {
-        return postRepository.getById(postId);
+    private Optional<Post> getById(@PathVariable Long postId) {
+        return postRepository.findById(postId);
     }
 
     @PostMapping

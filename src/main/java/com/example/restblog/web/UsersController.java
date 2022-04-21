@@ -3,9 +3,9 @@ package com.example.restblog.web;
 import com.example.restblog.data.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -34,20 +34,18 @@ public class UsersController {
     }
 
     @GetMapping("{userId}")
-    private User getById(@PathVariable Long userId) {
-        return userRepository.getById(userId);
+    private Optional<User> getById(@PathVariable Long userId) {
+        return userRepository.findById(userId);
     }
 
     @GetMapping("username")
     private User getByUsername(@RequestParam String userName) {
-        User user = new User(1L, userName, "user@bigfatuser.com", "1234", null, User.Role.USER, Arrays.asList(POST1, POST2));
-        return user;
+        return userRepository.findByUsername(userName);
     }
 
     @GetMapping("email")
     private User getByEmail(@RequestParam String email) {
-        User user = new User(1L, "big fat user", email, "1234", null, User.Role.USER, Arrays.asList(POST1, POST2));
-        return user;
+        return userRepository.findByEmail(email);
     }
 
     @PostMapping
