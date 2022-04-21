@@ -1,11 +1,11 @@
-add the ViewController.java back into their projects
+X add the ViewController.java back into their projects
 
-no longer use intellij to test the app. just go to http://localhost:8080 or 8081
+X no longer use intellij to test the app. just go to http://localhost:8080 or 8081
 	also redirects now from changing address line in the browser
 
 
 
-change User.java annotations on Role and Posts
+x change User.java annotations on Role and Posts
 
 public class User {
 
@@ -32,11 +32,59 @@ public class User {
 }
 
 
-change data type for users.role in db to CHAR(10) and make sure values are in there
+x change data type for users.role in db to CHAR(10) and make sure values are in there
 	GO AHEAD AND DELETE ALL USERS AND ALL POSTS
 
-make sure password field in users table is VARCHAR(255)
+x make sure password field in users table is VARCHAR(255)
+
+ALSO: may need to rebuild ~/.m2
+    delete the ~/.m2 dir
+    mvn clean
+    mvn install
+    mvn package
+    run the backend
+
+    NOTE I also had to switch from JDK 17 to JDK 11!!!
+    check IntelliJ Project settings!!!
+    was getting an RSA key issue and backend would not launch!!
+
+x make sure you have a createUser endpoint working!
+    AND: set the user's role
+    AND: encrypt the user's password by injecting a PasswordEncoder into the UsersController
+    here is what my method looks like:
+    @PostMapping
+    private void createUser(@RequestBody User newUser) {
+        System.out.println("Backend wants to create: " + newUser);
+        newUser.setRole(User.Role.USER);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        System.out.println("Backend wants to create: " + newUser);
+        userRepository.save(newUser);
+    }
+
 
 IMPORTANT passwords may need to be stored in the db encrypted
 	SO REGISTER A USER FIRST!!!! so the password gets encrypted
+
+check ResourceServerConfiguration.configure
+    prevent posts and users endpoints from allowing all access
+    this is mine:
+
+    http
+                    .cors()
+                .and()
+                    .csrf()
+                        .disable()
+                    .formLogin()
+                        .disable()
+                    .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                    .authorizeRequests()
+                        .antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .antMatchers("/api/posts/**").hasAnyAuthority("ADMIN", "USER")
+                        .antMatchers("/api/users/**").hasAnyAuthority("ADMIN", "USER")
+                        .antMatchers("/api/**").authenticated()
+                    .anyRequest().authenticated()
+                .and()
+                    .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
 
