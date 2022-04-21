@@ -1,30 +1,33 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Category;
-import com.example.restblog.data.Post;
 import com.example.restblog.data.User;
+import com.example.restblog.data.UsersRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UsersController {
 
-    @GetMapping
-    private List<User> getAll() {
-        List<User> users = new ArrayList<>();
-        return users;
+    private final UsersRepository usersRepository;
+
+    public UsersController(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
-//    @GetMapping("{userId}")
-//    private User getById(@PathVariable Long userId) {
-//        User user = new User(userId, "bob smith", "bob@smith.com", "1234", null, User.Role.USER, Arrays.asList(POST1, POST2));
-//        return user;
-//    }
+    @GetMapping
+    private List<User> getAll() {
+        return usersRepository.findAll();
+    }
+
+    @GetMapping("{userId}")
+    private Optional<User> getById(@PathVariable Long userId) {
+        return usersRepository.findById(userId);
+    }
 
 //    @GetMapping("username")
 //    private User getByUsername(@RequestParam String userName) {
@@ -40,7 +43,11 @@ public class UsersController {
 
     @PostMapping
     private void createUser(@RequestBody User newUser) {
-        System.out.println("Backend wants to create: " + newUser);
+        User userToAdd = newUser;
+        newUser.setCreatedAt(LocalDate.now());
+        newUser.setRole(User.Role.USER);
+        usersRepository.save(userToAdd);
+        System.out.println("User created!");
     }
 
     @PutMapping("{userId}")

@@ -45,6 +45,9 @@ export default function PostIndex(props) {
                 <label for="add-post-content" class="form-label">Content</label>
                 <textarea class="form-control" id="add-post-content" rows="3" placeholder="Post content"></textarea>
                 </div>
+                <div>
+                    
+                </div>
                 <br>
                 <button id="clear-post-button" type="submit" class="btn btn-primary mb-3"
                         onclick="document.querySelector('#add-post-id').value = 0; document.querySelector('#add-post-title').value = ''; document.querySelector('#add-post-content').value = '';">

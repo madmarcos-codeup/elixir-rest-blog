@@ -1,5 +1,7 @@
 package com.example.restblog.data;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,16 +22,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column
+    @Column(nullable = false)
     String username;
-    @Column
+    @Column(nullable = false)
     String email;
-    @Column
+    @Column(nullable = false)
     String password;
-    @Column
+    @Column(nullable = false)
     LocalDate createdAt;
-    @Column
+    @Column(nullable = false)
     Role role;
-//    @OneToMany
-//    Collection<Post> posts;
+    @OneToMany(mappedBy = "author")
+    @JsonIgnoreProperties("author")
+    Collection<Post> posts;
 }

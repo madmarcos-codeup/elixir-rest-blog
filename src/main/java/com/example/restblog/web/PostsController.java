@@ -1,26 +1,26 @@
 package com.example.restblog.web;
 
-import com.example.restblog.data.Category;
-import com.example.restblog.data.Post;
-import com.example.restblog.data.PostsRepository;
-import com.example.restblog.data.User;
+import com.example.restblog.data.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/posts", headers = "Accept=application/json")
 public class PostsController {
 
-    private PostsRepository postsRepository;
+    private final PostsRepository postsRepository;
+    private final UsersRepository usersRepository;
+    private final CategoriesRepository categoriesRepository;
 
-    public PostsController(PostsRepository postsRepository) {
+    public PostsController(PostsRepository postsRepository, UsersRepository usersRepository, CategoriesRepository categoriesRepository) {
         this.postsRepository = postsRepository;
+        this.usersRepository = usersRepository;
+        this.categoriesRepository = categoriesRepository;
     }
-
 
     @GetMapping
     private List<Post> getAll() {
@@ -28,14 +28,26 @@ public class PostsController {
     }
 
     @GetMapping("{postId}")
-    private Post getById(@PathVariable Long postId) {
-        return postsRepository.getById(postId);
+    private Optional<Post> getById(@PathVariable Long postId) {
+        return postsRepository.findById(postId);
     }
 
     @PostMapping
     private void createPost(@RequestBody Post newPost) {
-        Post post = new Post(1L, newPost.getTitle(), newPost.getContent());
-        postsRepository.save(post);
+        newPost.setAuthor(usersRepository.getById(1L));
+        List<Category> categories = new ArrayList<>();
+        for (Category category : newPost.getCategories()) {
+            if (categoriesRepository.findCategoryByName(category.getName()) != null) {
+                categories.add(categoriesRepository.findCategoryByName(category.getName()));
+            } else {
+                Category newCat = new Category();
+                newCat.setName(category.getName());
+                categoriesRepository.save(newCat);
+                categories.add(categoriesRepository.findCategoryByName(newCat.getName()));
+            }
+        }
+        newPost.setCategories(categories);
+        postsRepository.save(newPost);
         System.out.println("New post created");
     }
 
@@ -54,4 +66,13 @@ public class PostsController {
         postsRepository.delete(postToDelete);
     }
 
+    @GetMapping("searchByCategory")
+    private List<Post> searchPostsByCategory(@RequestParam String category) {
+        return postsRepository.findAllByCategories(categoriesRepository.findCategoryByName(category));
+    }
+
+    @GetMapping("searchByTitle")
+    private List<Post> searchPostsByTitleKeyword(@RequestParam String keyword) {
+        return postsRepository.searchByTitleLike(keyword);
+    }
 }

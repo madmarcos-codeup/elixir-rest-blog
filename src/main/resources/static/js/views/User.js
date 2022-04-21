@@ -2,6 +2,7 @@ import createView from "../createView.js";
 
 const BASE_URI = 'http://localhost:8081/api/users';
 
+
 export default function UserIndex(props) {
     console.log(props);
     // language=HTML
@@ -16,7 +17,8 @@ export default function UserIndex(props) {
                 <label for="email">Email</label>
                 <input disabled id="email" name="email" type="email" value="${props.users.email}">
                 <label for="old-password">Old Password</label>
-                <input disabled id="old-password" name="old-password" type="password" value="this is not your real password"/>
+                <input disabled id="old-password" name="old-password" type="password"
+                       value="this is not your real password"/>
                 <label for="new-password">New Password</label>
                 <input id="new-password" name="new-password" type="password" value="this is not your real password"/>
                 <button id="change-password-button" type="button">Change Password</button>
@@ -26,22 +28,22 @@ export default function UserIndex(props) {
             ${props.users.posts.map(post => {
                 return `
 <div class="card">
-  <div class="card-header">
-    ${post.title}
-  </div>
-  <div class="card-body">
+<div class="card-header">
+${post.title}
+</div>
+<div class="card-body">
     <blockquote class="blockquote mb-0">
-      <p>${post.content}</p>
+        <p>${post.content}</p>
     </blockquote>
-  </div>
+</div>
 </div>`
-    }).join('')}
+            }).join('')}
         </main>
     `;
 }
 
 export function UserEvents() {
-    $("#change-password-button").click(function() {
+    $("#change-password-button").click(function () {
         const id = 1; // $("#add-post-id").val();
         let uriExtra = '/1/updatePassword';
         const oldPassword = $("#old-password").val()
