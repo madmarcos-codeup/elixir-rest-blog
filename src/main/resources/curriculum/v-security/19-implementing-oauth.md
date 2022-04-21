@@ -19,20 +19,21 @@ Be sure to pay **close attention** to details in this lesson. Naming, placement,
 ### 1. Let's drop a few dependencies into our `pom.xml`:
 
 ```XML
+
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-security</artifactId>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-com.example.restblog.security</artifactId>
 </dependency>
 <dependency>
-  <groupId>org.springframework.security.oauth.boot</groupId>
-  <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-  <version>2.1.0.RELEASE</version>
+<groupId>org.springframework.com.example.restblog.security.oauth.boot</groupId>
+<artifactId>spring-com.example.restblog.security-oauth2-autoconfigure</artifactId>
+<version>2.1.0.RELEASE</version>
 </dependency>
 ```
 
-### 2. Create a package named `security`
+### 2. Create a package named `com.example.restblog.security`
 
-### 3. Inside `security`, create a class named `UserService`.
+### 3. Inside `com.example.restblog.security`, create a class named `UserService`.
 
 - This class begins registering our Resource Owner with Spring Security
   
@@ -41,11 +42,11 @@ Be sure to pay **close attention** to details in this lesson. Naming, placement,
 
 ```JAVA
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.com.example.restblog.security.core.GrantedAuthority;
+import org.springframework.com.example.restblog.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.com.example.restblog.security.core.userdetails.UserDetails;
+import org.springframework.com.example.restblog.security.core.userdetails.UserDetailsService;
+import org.springframework.com.example.restblog.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found: " + email));
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Arrays.asList(authority));
+        return new org.springframework.com.example.restblog.security.core.userdetails.User(user.getEmail(), user.getPassword(), Arrays.asList(authority));
     }
 }
 ```
@@ -72,7 +73,7 @@ public class UserService implements UserDetailsService {
 
 ## TODO: Create the Authorization Server
 
-### 1. In `security`, create a class named `ServerSecurityConfig`.
+### 1. In `com.example.restblog.security`, create a class named `ServerSecurityConfig`.
 
 - This class begins orchestrating a more full picture of the `User` in relation to our application
   
@@ -90,14 +91,14 @@ public class UserService implements UserDetailsService {
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.com.example.restblog.security.authentication.AuthenticationManager;
+import org.springframework.com.example.restblog.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.com.example.restblog.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.com.example.restblog.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.com.example.restblog.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.com.example.restblog.security.core.userdetails.UserDetailsService;
+import org.springframework.com.example.restblog.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.com.example.restblog.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -134,7 +135,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 ---
-### 2. In `security` Create a class named `OAuthConfiguration`.
+### 2. In `com.example.restblog.security` Create a class named `OAuthConfiguration`.
 
 Here, we bind together our 
   - Resource Owner -> `User`/`UserDetailsService`, 
@@ -152,14 +153,14 @@ We bring together these resources in order to help create the definition of our 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.com.example.restblog.security.authentication.AuthenticationManager;
+import org.springframework.com.example.restblog.security.core.userdetails.UserDetailsService;
+import org.springframework.com.example.restblog.security.crypto.password.PasswordEncoder;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.com.example.restblog.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -252,7 +253,7 @@ Later on, we will change the `jwtSigningKey` to be something a *little* more sec
 
 ## TODO: Create the Resource Server
 
-### In `security`, create a class named `ResourceServerConfiguration`.
+### In `com.example.restblog.security`, create a class named `ResourceServerConfiguration`.
 
 - This class is responsible for the actual securing of individual endpoints defined in our controllers.
 - We can define
@@ -265,11 +266,11 @@ Later on, we will change the `jwtSigningKey` to be something a *little* more sec
 import com.example.restblog.errors.CustomAccessDeniedHandler;
 import com.example.restblog.errors.CustomAuthenticationEntryPoint;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.com.example.restblog.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.com.example.restblog.security.config.http.SessionCreationPolicy;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.com.example.restblog.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 @Configuration
 @EnableResourceServer
@@ -319,7 +320,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
 This method allows us to simply define the overall context of our resource. Often you may hear this referred to as a `realm`, `resource`, or `audience`.
 
-Basically, we want to let Spring Security know that `/api` is the beginning of our security context and concern.
+Basically, we want to let Spring Security know that `/api` is the beginning of our com.example.restblog.security context and concern.
 
 ---
 ### `configure(HttpSecurity http)` 
@@ -382,7 +383,7 @@ Instead, we will later learn how to use **more** annotations with very familiar 
 
 ## Testing
 
-At this point, it's time for us to explore what this security buys us.
+At this point, it's time for us to explore what this com.example.restblog.security buys us.
 
 As well, we are going to begin understanding the constraints it places on access to our application's endpoints.
 

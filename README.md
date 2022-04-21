@@ -32,7 +32,7 @@ Swagger is an excellent tool which provides full documentation of exposed endpoi
 
 #### Security Breakdown:
 
-There are 4 essential components of OAuth2.0 security:
+There are 4 essential components of OAuth2.0 com.example.restblog.security:
 
 - Client
   - The application used to access protected resources

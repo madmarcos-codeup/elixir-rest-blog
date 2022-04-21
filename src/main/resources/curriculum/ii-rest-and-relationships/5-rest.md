@@ -28,7 +28,7 @@ According to RedHat, the constraints needed for a RESTful API are:
     - self-descriptive messages returned to the client have enough information to describe how the client should process it.
     - hypertext/hypermedia is available, meaning that after accessing a resource the client should be able to use hyperlinks to find all other currently available actions they can take.
     
-- A layered system that organizes each type of server (those responsible for security, load-balancing, etc) involved in the retrieval of requested information into heirarchies, invisible to the client.
+- A layered system that organizes each type of server (those responsible for com.example.restblog.security, load-balancing, etc) involved in the retrieval of requested information into heirarchies, invisible to the client.
 
 - OPTIONAL: Code-on-demand -> the ability to send executable code from the server to the client when requested, extending client functionality.
 

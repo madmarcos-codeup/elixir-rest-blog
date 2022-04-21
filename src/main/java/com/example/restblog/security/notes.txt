@@ -1,0 +1,42 @@
+add the ViewController.java back into their projects
+
+no longer use intellij to test the app. just go to http://localhost:8080 or 8081
+	also redirects now from changing address line in the browser
+
+
+
+change User.java annotations on Role and Posts
+
+public class User {
+
+    public enum Role {USER, ADMIN};
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @NotEmpty
+    @Email
+    private String email;
+    private String username;
+    @JsonIgnore
+    @ToString.Exclude
+    private String password;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ToString.Exclude
+    private Collection<Post> posts;
+
+}
+
+
+change data type for users.role in db to CHAR(10) and make sure values are in there
+	GO AHEAD AND DELETE ALL USERS AND ALL POSTS
+
+make sure password field in users table is VARCHAR(255)
+
+IMPORTANT passwords may need to be stored in the db encrypted
+	SO REGISTER A USER FIRST!!!! so the password gets encrypted
+

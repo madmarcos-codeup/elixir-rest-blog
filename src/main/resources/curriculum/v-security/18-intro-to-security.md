@@ -1,6 +1,6 @@
 # Intro To Security
 
-As web developers, security is not just a nice-to-have: it is an ***imperative***.
+As web developers, com.example.restblog.security is not just a nice-to-have: it is an ***imperative***.
 
 When data on users drives so much we do, it's our job ensure their information is safe.
 
@@ -10,7 +10,7 @@ There are two parts to securing an application:
 
 ####Authentication and Authorization
 
-And we have a fantastic way of implementing that security!
+And we have a fantastic way of implementing that com.example.restblog.security!
 
 ---
 ## OAuth 2.0
@@ -19,7 +19,7 @@ There are many ways to secure applications.
 One of the airtight methods is to use the **OAuth 2.0** specification.
 
 In the future, you may find yourself using more complex mechanisms for implementing OAuth, 
-but here is a breakdown of the parts which make our security environment:
+but here is a breakdown of the parts which make our com.example.restblog.security environment:
 
 ### 1. Resource Owner
 

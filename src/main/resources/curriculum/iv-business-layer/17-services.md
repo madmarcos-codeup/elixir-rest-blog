@@ -89,7 +89,7 @@ class PostsController {
 
 
 ---
-###Now, we have three distinct layers of our server-side application (aside from security):
+###Now, we have three distinct layers of our server-side application (aside from com.example.restblog.security):
 
 - Data Transfer Layer (Controllers)
   

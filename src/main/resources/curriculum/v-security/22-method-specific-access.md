@@ -120,7 +120,7 @@ and a database record must be updated before authorization can be evaluated.
 
 ---
 
-For more method-level security annotations and examples, check out this article:
+For more method-level com.example.restblog.security annotations and examples, check out this article:
 
 [Baeldung: Method Security](https://www.baeldung.com/spring-security-method-security)
 

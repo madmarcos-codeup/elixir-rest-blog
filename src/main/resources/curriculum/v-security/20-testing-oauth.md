@@ -1,6 +1,6 @@
 # Testing with OAuth 2.0
 
-Now that we have the core security pieces in place, 
+Now that we have the core com.example.restblog.security pieces in place, 
 we will need to take a look at:
 
 

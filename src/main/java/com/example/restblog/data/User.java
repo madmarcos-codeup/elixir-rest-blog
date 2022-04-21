@@ -1,9 +1,11 @@
 package com.example.restblog.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
@@ -34,10 +36,11 @@ public class User {
     @Column
     private LocalDate createdAt;
 
-    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Role role;
-
-    @OneToMany(mappedBy = "author")
-    @JsonIgnoreProperties("author")
+    @JsonIgnore
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ToString.Exclude
     private Collection<Post> posts;
 }
