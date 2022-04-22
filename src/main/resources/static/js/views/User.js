@@ -5,7 +5,7 @@ const BASE_URI = 'http://localhost:8081/api/users';
 export default function UserIndex(props) {
     console.log(props);
     // language=HTML
-    return `
+    let html = `
         <header>
             <h1>Your Page</h1>
         </header>
@@ -20,9 +20,10 @@ export default function UserIndex(props) {
                 <button id="change-password-button" type="button">Change Password</button>
             </form>
             <hr>
-            <h5>My Posts</h5>
-            ${props.users.posts.map(post => {
-                return `
+            <h5>My Posts</h5>`;
+            if(props.users.posts) {
+                html += `${props.users.posts.map(post => {
+                    return `
 <div class="card">
   <div class="card-header">
     ${post.title}
@@ -33,9 +34,11 @@ export default function UserIndex(props) {
     </blockquote>
   </div>
 </div>`
-    }).join('')}
-        </main>
-    `;
+                }).join('')}`;
+            }
+
+        html += `</main>`;
+            return html;
 }
 
 export function UserEvents() {

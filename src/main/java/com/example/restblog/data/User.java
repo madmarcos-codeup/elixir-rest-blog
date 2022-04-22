@@ -40,7 +40,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @ToString.Exclude
     private Collection<Post> posts;
