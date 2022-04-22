@@ -1,4 +1,5 @@
 import createView from "../createView.js";
+import {getHeaders} from "../auth.js";
 
 const BASE_URI = 'http://localhost:8081/api/posts';
 
@@ -73,7 +74,9 @@ function createAddPostListener() {
         const id = $("#add-post-id").val();
 
         // make the request
-        const request = {};
+        let request = {
+            headers: getHeaders()
+        }
         let uriExtra = "";
         if(id > 0) {
             // newPost.id = id; // don't need this for a put
@@ -85,9 +88,6 @@ function createAddPostListener() {
             request.method = "POST";
             console.log("Ready to add this post:");
         }
-        request.headers = {
-            'Content-Type': 'application/json'
-        };
         request.body = JSON.stringify(newPost);
         fetch(`${BASE_URI}${uriExtra}`, request)
             .then(res => {
@@ -123,9 +123,10 @@ function createDeletePostListeners() {
         console.log("Ready to delete the post with id " + id);
 
         // make the request
-        const request = {
-            method: 'DELETE'
-        };
+        let request = {
+            headers: getHeaders()
+        }
+        request.method = 'DELETE';
         fetch(`${BASE_URI}/${id}`, request)
             .then(res => {
                 console.log("DELETE SUCCESS: " + res.status);

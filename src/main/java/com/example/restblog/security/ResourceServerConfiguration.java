@@ -42,6 +42,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                     .antMatchers("/api/posts/**").hasAnyAuthority("ADMIN", "USER")
                     .antMatchers("/api/users/**").hasAnyAuthority("ADMIN", "USER")
                     .antMatchers("/api/**").authenticated()
+                    .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler());
