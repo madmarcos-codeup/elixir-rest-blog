@@ -34,14 +34,9 @@ public class PostsController {
     @PostMapping
     private void createPost(@RequestBody Post newPost, OAuth2Authentication auth) {
         System.out.println(newPost);
-        // associate user 1 with the post
-        // also plug in all categories (1, 2, 3)
         String email = auth.getName(); // yes, the email is found under "getName()"
         User user = userRepository.findByEmail(email); // use the email to get the user who made the request
         newPost.setAuthor(user); //set the user to the post
-//        newPost.setCategories(Arrays.asList(categoriesRepository.getById(1L),
-//                categoriesRepository.getById(2L),
-//                categoriesRepository.getById(3L)));
         prepareCategories(newPost);
         postRepository.save(newPost);
 
