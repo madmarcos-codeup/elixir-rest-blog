@@ -40,7 +40,7 @@ public class PostsController {
                 categoriesRepository.getById(3L)));
         postRepository.save(newPost);
 
-        emailService.prepareAndSend(newPost, "New post!", "Hi there. You made a new post!");
+        emailService.prepareAndSend(newPost, "Hey a new Post!", "See subject");
     }
 
     @PutMapping("{postId}")

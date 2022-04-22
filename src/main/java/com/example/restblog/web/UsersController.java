@@ -40,6 +40,8 @@ public class UsersController {
     @PostMapping
     private void createUser(@RequestBody User newUser) {
         System.out.println("Backend wants to create: " + newUser);
+        newUser.setRole(User.Role.USER);
+        userRepository.save(newUser);
     }
 
     @PutMapping("{userId}")

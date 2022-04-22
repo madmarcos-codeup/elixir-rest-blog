@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @Entity
 @Table(name="users")
@@ -25,19 +27,23 @@ public class User {
     @Column(nullable = false)
     private String username;
 
-    @Column
+    @Email
+    @NotEmpty
     private String email;
 
-    @Column
+//    @JsonIgnore
+    @ToString.Exclude
     private String password;
 
     @Column
     private LocalDate createdAt;
 
-    @Column
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "author")
     @JsonIgnoreProperties("author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ToString.Exclude
     private Collection<Post> posts;
 }
