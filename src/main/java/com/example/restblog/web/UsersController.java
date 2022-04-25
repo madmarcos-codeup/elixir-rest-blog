@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +40,8 @@ public class UsersController {
     private void createUser(@RequestBody User newUser) {
         System.out.println("Backend wants to create: " + newUser);
         newUser.setRole(User.Role.USER);
-        String encryptedPassword = newUser.getPassword();
-        encryptedPassword = passwordEncoder.encode(encryptedPassword);
+        String plainTextPassword = newUser.getPassword();
+        String encryptedPassword = passwordEncoder.encode(plainTextPassword);
         newUser.setPassword(encryptedPassword);
         userRepository.save(newUser);
     }

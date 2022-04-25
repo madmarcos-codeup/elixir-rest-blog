@@ -1,4 +1,5 @@
 import createView from "../createView.js";
+import {getHeaders} from "../auth.js";
 
 const BASE_URI = 'http://localhost:8081/api/posts';
 
@@ -73,7 +74,9 @@ function createAddPostListener() {
         const id = $("#add-post-id").val();
 
         // make the request
-        const request = {};
+        const request = {
+            headers: getHeaders()
+        };
         let uriExtra = "";
         if(id > 0) {
             // newPost.id = id; // don't need this for a put
@@ -85,9 +88,6 @@ function createAddPostListener() {
             request.method = "POST";
             console.log("Ready to add this post:");
         }
-        request.headers = {
-            'Content-Type': 'application/json'
-        };
         request.body = JSON.stringify(newPost);
         fetch(`${BASE_URI}${uriExtra}`, request)
             .then(res => {
