@@ -26,6 +26,13 @@ public class UsersController {
         return userRepository.findById(userId);
     }
 
+    @GetMapping("me")
+    private User getMyInfo(@RequestParam String userName) {
+        // TODO: return the currently logged in user info
+        return userRepository.findByUsername(userName);
+    }
+
+
     @GetMapping("username")
     private User getByUsername(@RequestParam String userName) {
         return userRepository.findByUsername(userName);

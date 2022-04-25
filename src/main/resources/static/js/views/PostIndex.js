@@ -124,7 +124,8 @@ function createDeletePostListeners() {
 
         // make the request
         const request = {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getHeaders()
         };
         fetch(`${BASE_URI}/${id}`, request)
             .then(res => {
