@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -31,10 +32,14 @@ public class PostsController {
     }
 
     @PostMapping
-    private void createPost(@RequestBody Post newPost) {
+    private void createPost(@RequestBody Post newPost, OAuth2Authentication auth) {
         // associate user 1 with the post
         // also plug in all categories (1, 2, 3)
-        newPost.setAuthor(userRepository.getById(1L));
+//        newPost.setAuthor(userRepository.getById(1L));
+        String email = auth.getName(); // yes, the email is found under "getName()"
+        User author = userRepository.findByEmail(email); // .get(); // use the email to get the user who made the request
+        newPost.setAuthor(author);
+
         newPost.setCategories(Arrays.asList(categoriesRepository.getById(1L),
                 categoriesRepository.getById(2L),
                 categoriesRepository.getById(3L)));
