@@ -32,7 +32,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ${{ secrets.DEPLOY_DIR }}
-            git pull
+            git pull origin deploy
             pm2 reload all
           
 # end of deployment script
