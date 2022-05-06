@@ -31,12 +31,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            echo ${{ secrets.HOST }}
-            echo ${{ secrets.USERNAME }}
-            echo ${{ secrets.SSH_KEY }}
-            echo ${{ secrets.PORT }}
-            echo ${{ secrets.DEPLOY_DIR }}
             cd ${{ secrets.DEPLOY_DIR }}
+            git checkout deploy
             git pull origin deploy
             pm2 reload all
           
