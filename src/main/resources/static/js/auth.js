@@ -1,5 +1,6 @@
 import fetchData from "./fetchData.js";
 import createView from "./createView.js";
+import {showNotification} from "./messaging.js";
 
 /**
  * Adds a login event to allow the user to initially obtain a new OAuth2.0 token
@@ -29,11 +30,17 @@ export default function addLoginEvent() {
         fetchData(
             {
                 route: `/oauth/token`
-            },
-            request).then((data) => {
-            setTokens(data);
-            createView("/");
-        });
+            }, request).then((data) => {
+                // if login fails, then display a message and stay on page
+                if(data.route.error) {
+                    showNotification("Failed to log in: " + data.route.error, "warning");
+                    return;
+                }
+                setTokens(data);
+                createView("/");
+            }).catch((error) => {
+                // this does not get called on a 401
+            });
     });
 }
 
@@ -64,4 +71,62 @@ function setTokens(responseData) {
         localStorage.setItem("refresh_token", responseData.route['refresh_token']);
         console.log("Refresh token set")
     }
+}
+
+export function isLoggedIn() {
+    if(localStorage.getItem('access_token')) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+//  returns an object with user_name and authority from the access_token
+export function getUser() {
+    const accessToken = localStorage.getItem("access_token");
+    if(!accessToken) {
+        return false;
+    }
+    const parts = accessToken.split('.');
+    const payload = parts[1];
+    const decodedPayload = atob(payload);
+    const payloadObject = JSON.parse(decodedPayload);
+    const user = {
+        userName: payloadObject.user_name,
+        role: payloadObject.authorities[0]
+    }
+    return user;
+}
+
+export function getUserRole() {
+    const accessToken = localStorage.getItem("access_token");
+    if(!accessToken) {
+        return false;
+    }
+    const parts = accessToken.split('.');
+    const payload = parts[1];
+    const decodedPayload = atob(payload);
+    const payloadObject = JSON.parse(decodedPayload);
+    return payloadObject.authorities[0];
+}
+
+export async function removeStaleTokens() {
+    console.log("Removing stale tokens...");
+
+    // clear tokens from localStorage if backend tells us the tokens are invalid
+    // make the request
+    const request = {
+        method: 'GET',
+        headers: getHeaders()
+    };
+    await fetch(`/api/users/me`, request)
+        .then((response) => {
+            // if fetch error then you might be using stale tokens
+            if (response.status === 401) {
+                window.localStorage.clear();
+            }
+        }).catch(error => {
+            console.log("FETCH ERROR: " + error);
+        });
 }

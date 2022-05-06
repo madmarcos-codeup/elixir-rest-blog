@@ -1,9 +1,11 @@
 import createView from "../createView.js";
-import {getHeaders} from "../auth.js";
+import {getHeaders, getUser} from "../auth.js";
 
 const BASE_URI = 'http://localhost:8081/api/posts';
 
 export default function PostIndex(props) {
+    console.log(props);
+
     // language=HTML
     return `
         <header>
@@ -32,38 +34,124 @@ export default function PostIndex(props) {
 </div>`;
                 }).join('')}
             </div>
-            <hr>
-            <h3>Add a Post</h3>
-            <form id="add-post-form">
-                <div class="mb-3">
-                    <input disabled type="text" class="form-control" id="add-post-id" value="0">
-                </div>
-                <div class="mb-3">
-                    <label for="add-post-title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="add-post-title" placeholder="Post title">
-                </div>
-                <label for="add-post-content" class="form-label">Content</label>
-                <textarea class="form-control" id="add-post-content" rows="3" placeholder="Post content"></textarea>
-                </div>
-                <br>
-                <button id="clear-post-button" type="submit" class="btn btn-primary mb-3"
-                        onclick="document.querySelector('#add-post-id').value = 0; document.querySelector('#add-post-title').value = ''; document.querySelector('#add-post-content').value = '';">
-                    Clear
-                </button>
-                <button id="add-post-button" type="submit" class="btn btn-primary mb-3">Submit</button>
-            </form>
+            <div id="add-post-div">
+                <hr>
+                <h3>Add a Post</h3>
+                <form id="add-post-form">
+                    <div class="mb-3">
+                        <input disabled type="text" class="form-control" id="add-post-id" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label id="add-post-title-label" for="add-post-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="add-post-title" placeholder="Post title">
+                        <div id="add-post-title-error" class="invalid-feedback">
+                            Title must be non-blank.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="add-post-content" class="form-label">Content</label>
+                        <textarea class="form-control" id="add-post-content" rows="3" placeholder="Post content"></textarea>
+                        <div id="add-post-content-error" class="invalid-feedback">
+                            Content must be non-blank.
+                        </div>
+                    </div>
+
+                    <!-- display array of categories as checkboxes -->
+                    ${props.categories.map(category => {
+                        return `
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="category-${category.id}" value="category-${category.id}">
+                                <label class="form-check-label" for="category-${category.id}">${category.name}</label>
+                            </div>
+                            `;                        
+                    }).join("")}
+                    
+                    <br>
+                    <button id="clear-post-button" type="submit" class="btn btn-primary mb-3"
+                            onclick="document.querySelector('#add-post-id').value = 0; document.querySelector('#add-post-title').value = ''; document.querySelector('#add-post-content').value = '';">
+                        Clear
+                    </button>
+                    <button id="add-post-button" type="submit" class="btn btn-primary mb-3">Submit</button>
+                </form>
+            </div>
+            
         </main>
     `;
 }
 
+function createAddFormListeners() {
+    $("#add-post-title").keyup((event) => {
+        validatePost();
+    });
+    $("#add-post-content").keyup((event) => {
+        validatePost();
+    });
+    $("#inlineCheckbox1").click((event) => {
+        if($(this).prop("checked") === true)
+            $(this).prop("checked", false);
+        else
+            $(this).prop("checked", true);
+    })
+
+}
+
 export function PostEvents() {
+    createAddFormListeners();
     createAddPostListener();
     createEditPostListeners();
     createDeletePostListeners();
+
+    // only authenticated people get to add posts
+    if(!getUser()) {
+        $("#add-post-div").hide();
+        $(".edit-post-button").hide();
+        $(".delete-post-button").hide();
+    }
+}
+
+function validatePost() {
+    // return true if post is valid else false
+    const title = $("#add-post-title").val();
+    const content = $("#add-post-content").val();
+
+    let isFormOk = true;
+
+    // valid title is non blank
+    if(title.trim().length === 0) {
+        // console.log("Title must be non-blank");
+        $("#add-post-title").addClass("border border-danger");
+        $("#add-post-title-error").show();
+        isFormOk = false;
+    } else {
+        $("#add-post-title").removeClass("border border-danger");
+        $("#add-post-title-error").hide();
+    }
+
+    // valid content is non-blank
+    if(content.trim().length === 0) {
+        $("#add-post-content").addClass("border border-danger");
+        $("#add-post-content-error").show();
+        isFormOk = false;
+    } else {
+        $("#add-post-content").removeClass("border border-danger");
+        $("#add-post-content-error").hide();
+    }
+
+    return isFormOk;
 }
 
 function createAddPostListener() {
     $("#add-post-button").click(function() {
+
+        // if ($("input[type=checkbox]").is(":checked")) {
+        //     alert("Checked");
+        // }
+
+        // if invalid post, go no further
+        if(!validatePost()) {
+            return;
+        }
+
         // create the post body that will become the request body
         const newPost = {
             title: $("#add-post-title").val(),

@@ -45,7 +45,8 @@ public class UsersController {
         return userRepository.findByEmail(email);
     }
 
-    @PostMapping
+    // create user is now at endpoint /api/users/create
+    @PostMapping("create")
     private void createUser(@RequestBody User newUser) {
         System.out.println("Backend wants to create: " + newUser);
         newUser.setRole(User.Role.USER);
