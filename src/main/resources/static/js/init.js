@@ -1,5 +1,5 @@
 import createView from './createView.js';
-const constants = require("./constants");
+import {FRONTEND_VERSION} from "./constants.js";
 
 export default function init() {
     loadViewOnPageRequest();
@@ -12,7 +12,7 @@ function loadViewOnPageRequest() {
     window.addEventListener('DOMContentLoaded', function() {
         //TODO: Switched to location.pathname so the route would be accurate to current view
         createView(location.pathname);
-        $("footer").html("Version " + constants.FRONTEND_VERSION);
+        $("footer").html("Version " + FRONTEND_VERSION);
     });
 }
 
