@@ -1,6 +1,6 @@
-import Home from "./views/Home.js";
+import Home, {HomeEvents} from "./views/Home.js";
 import PostIndex from "./views/PostIndex.js";
-import About from "./views/About.js";
+import About, {AboutEvents} from "./views/About.js";
 import Error404 from "./views/Error404.js";
 import Loading from "./views/Loading.js";
 import Login from "./views/Login.js";
@@ -8,8 +8,8 @@ import LoginEvent from "./auth.js";
 import Register from "./views/Register.js"
 import {RegisterEvent} from "./views/Register.js";
 import {PostEvents} from "./views/PostIndex.js";
-import UserIndex from "./views/User.js"
-import {UserEvents} from "./views/User.js";
+import UserIndex, {UserEvents} from "./views/User.js";
+import Logout, {LogoutEvents} from "./views/Logout.js";
 
 /**
  * Returns the route object for a specific route based on the given URI
@@ -23,6 +23,14 @@ export default function router(URI) {
             state: {},
             uri: '/',
             title: 'Home',
+            viewEvent: HomeEvents
+        },
+        '/logout': {
+            returnView: Logout,
+            state: {},
+            uri: '/',
+            title: 'Logout',
+            viewEvent: LogoutEvents
         },
         '/login': {
             returnView: Login,
@@ -41,7 +49,7 @@ export default function router(URI) {
         '/users': {
             returnView: UserIndex,
             state: {
-                users: "/api/users/1"
+                users: "/api/users/me"
             },
             uri: "/users",
             title: 'User Info',
@@ -50,7 +58,8 @@ export default function router(URI) {
         '/posts': {
             returnView: PostIndex,
             state: {
-                posts: '/api/posts'
+                posts: '/api/posts',
+                categories: '/api/categories'
             },
             uri: '/posts',
             title: 'All Posts',
@@ -61,6 +70,7 @@ export default function router(URI) {
             state: {},
             uri: '/about',
             title: 'About',
+            viewEvent: AboutEvents
         },
         '/error': {
             returnView: Error404,

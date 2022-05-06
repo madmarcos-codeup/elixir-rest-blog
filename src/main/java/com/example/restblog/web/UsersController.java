@@ -1,21 +1,21 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.*;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = "/api/users", headers = "Accept=application/json")
 public class UsersController {
     private final UsersRepository userRepository;
-
-    public UsersController(UsersRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     private List<User> getAll() {
@@ -27,6 +27,14 @@ public class UsersController {
         return userRepository.findById(userId);
     }
 
+    // return a user object for the logged in user
+    @GetMapping("me")
+    private User getMyInfo(OAuth2Authentication auth) {
+        String email = auth.getName(); // yes, the email is found under "getName()"
+        return userRepository.findByEmail(email);
+    }
+
+
     @GetMapping("username")
     private User getByUsername(@RequestParam String userName) {
         return userRepository.findByUsername(userName);
@@ -37,9 +45,15 @@ public class UsersController {
         return userRepository.findByEmail(email);
     }
 
-    @PostMapping
+    // create user is now at endpoint /api/users/create
+    @PostMapping("create")
     private void createUser(@RequestBody User newUser) {
         System.out.println("Backend wants to create: " + newUser);
+        newUser.setRole(User.Role.USER);
+        String plainTextPassword = newUser.getPassword();
+        String encryptedPassword = passwordEncoder.encode(plainTextPassword);
+        newUser.setPassword(encryptedPassword);
+        userRepository.save(newUser);
     }
 
     @PutMapping("{userId}")

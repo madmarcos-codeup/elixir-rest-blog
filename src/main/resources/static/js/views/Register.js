@@ -1,6 +1,7 @@
 import createView from "../createView.js"
+import {getHeaders, isLoggedIn} from "../auth.js";
 
-const BASE_URI = 'http://localhost:8081/api/users';
+const BASE_URI = 'http://localhost:8081/api/users/create';
 
 export default function Register(props) {
     // language=HTML
@@ -29,6 +30,8 @@ export default function Register(props) {
 }
 
 export function RegisterEvent(){
+    console.log("am I logged in ? " + isLoggedIn());
+
     $("#register-btn").click(function(){
 
         // make a new user object from the provided fields
@@ -43,7 +46,7 @@ export function RegisterEvent(){
         // make the request to send to the backend
         let request = {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: getHeaders(),
             body: JSON.stringify(newUser)
         }
 
