@@ -1,5 +1,5 @@
 import createView from "../createView.js";
-import {BACKEND_HOST, BACKEND_PORT} from "./constants.js";
+import {BACKEND_HOST, BACKEND_PORT} from "../constants.js";
 
 const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}/api/users`;
 
