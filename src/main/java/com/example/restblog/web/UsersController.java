@@ -1,7 +1,9 @@
 package com.example.restblog.web;
 
 import com.example.restblog.data.*;
+import com.example.restblog.services.S3Service;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @AllArgsConstructor
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class UsersController {
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private S3Service s3Service;
 
     @GetMapping
     private List<User> getAll() {
@@ -31,7 +35,11 @@ public class UsersController {
     @GetMapping("me")
     private User getMyInfo(OAuth2Authentication auth) {
         String email = auth.getName(); // yes, the email is found under "getName()"
-        return userRepository.findByEmail(email);
+        User me = userRepository.findByEmail(email);
+
+        me.setPhotourl(s3Service.getSignedURL(me.getPhotoFileName()));
+        log.info(me.getPhotourl());
+        return me;
     }
 
 

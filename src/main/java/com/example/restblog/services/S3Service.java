@@ -1,10 +1,11 @@
 package com.example.restblog.services;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
-import com.example.restblog.config.S3Config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.time.Instant;
 
 // from https://www.youtube.com/watch?v=vY7c7k8xmKE
 
@@ -44,10 +47,12 @@ public class S3Service {
 
     public String uploadFile(MultipartFile file) {
         File convertedFile = convertMultipartFileToFile(file);
-        String fileName = file.getOriginalFilename();
+        // generate a unique-ish s3 filename based on file's name + current time
+        String fileName = file.getOriginalFilename() + System.currentTimeMillis();
         s3Client.putObject(bucket, fileName, convertedFile);
         convertedFile.delete();
-        return fileName + " uploaded";
+        // return the file's s3 name since you may need to store it somewhere
+        return fileName;
     }
 
     private File convertMultipartFileToFile(MultipartFile file) {
@@ -58,5 +63,21 @@ public class S3Service {
             log.error(e.getMessage());
         }
         return convertedFile;
+    }
+
+    public String getSignedURL(String fileName) {
+        java.util.Date expiration = new java.util.Date();
+        long expTimeMillis = Instant.now().toEpochMilli();
+        expTimeMillis += 1000 * 60 * 5; // default to 5 minute expiration
+        expiration.setTime(expTimeMillis);
+
+        // Generate the presigned URL.
+        log.info("Generating pre-signed URL.");
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucket, fileName)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(expiration);
+        URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+        return url.toString();
     }
 }

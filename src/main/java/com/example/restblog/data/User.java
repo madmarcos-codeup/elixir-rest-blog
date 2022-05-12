@@ -42,6 +42,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "photo_filename")
+    @ToString.Exclude
+    private String photoFileName;
+
+    @Transient
+    private String photourl;
+
     @JsonIgnoreProperties("author")
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @ToString.Exclude

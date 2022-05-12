@@ -11,6 +11,8 @@ export default function UserIndex(props) {
             <h1>Your Page</h1>
         </header>
         <main>
+            <img src="${props.users.photourl}">
+
             <form id="register-form">
                 <label for="username">Username</label>
                 <input disabled id="username" name="username" value="${props.users.username}" type="text"/><br>

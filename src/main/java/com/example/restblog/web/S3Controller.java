@@ -19,10 +19,8 @@ public class S3Controller {
 
     @GetMapping("download/{fileName}")
     public ResponseEntity<ByteArrayResource> getByFilename(@PathVariable String fileName) {
-        log.info("Howdy");
         byte [] data = s3Service.downloadFile(fileName);
         ByteArrayResource bytes = new ByteArrayResource(data);
-        log.info("Howdy 2");
         return ResponseEntity
                 .ok()
                 .contentLength(data.length)

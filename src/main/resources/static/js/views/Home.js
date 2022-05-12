@@ -15,7 +15,6 @@ export default function Home(props) {
                 <p>
                     This is the home page text.
                 </p>    
-                <img src="${BASE_URI + '/dude.gif'}">
             </div>
         </main>
     `;
