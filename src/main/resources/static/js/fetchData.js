@@ -1,3 +1,4 @@
+import {BACKEND_HOST, BACKEND_PORT} from "./constants.js";
 
 /**
  * Given an object containing all the required data for a given page, fetch all the needed data and return it as properties to pass to a view.
@@ -5,7 +6,7 @@
  * @param request
  * @returns {Promise<{}>}
  */
-const BASE_URI = "http://localhost:8081";
+const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
 
 export default function fetchData(state, request) {
     const promises = [];

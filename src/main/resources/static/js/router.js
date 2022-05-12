@@ -87,5 +87,8 @@ export default function router(URI) {
     };
 
     return routes[URI];
+
+    // if uri looks like /users/1
+
 }
 
