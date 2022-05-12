@@ -2,8 +2,6 @@ import createView from "../createView.js"
 import {getHeaders, isLoggedIn} from "../auth.js";
 import {BACKEND_HOST, BACKEND_PORT} from "../constants.js";
 
-console.log("backend 2 constant " + BACKEND_URL_2);
-
 const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}/api/users/create`;
 
 export default function Register(props) {

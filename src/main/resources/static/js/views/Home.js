@@ -1,5 +1,8 @@
 import {showNotification} from "../messaging.js";
 import {getUser} from "../auth.js";
+import {BACKEND_HOST, BACKEND_PORT} from "../constants.js";
+
+const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}/api/s3/download`;
 
 export default function Home(props) {
     console.log("The frontend did it. HER FAULT");
@@ -12,6 +15,7 @@ export default function Home(props) {
                 <p>
                     This is the home page text.
                 </p>    
+                <img src="${BASE_URI + '/dude.gif'}">
             </div>
         </main>
     `;
