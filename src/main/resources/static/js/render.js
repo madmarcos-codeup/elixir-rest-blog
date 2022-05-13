@@ -12,7 +12,7 @@ export default function render(props, route) {
     document.title = title;
     //language=html
     app.innerHTML = `${Navbar(null)}
-         ${getNotificationElement()} 
+        ${getNotificationElement()} 
         ${route.returnView(props)}`;
     if (route.viewEvent){
         route.viewEvent();

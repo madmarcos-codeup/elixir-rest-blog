@@ -38,6 +38,7 @@ public class UsersController {
         User me = userRepository.findByEmail(email);
 
         me.setPhotourl(s3Service.getSignedURL(me.getPhotoFileName()));
+
         log.info(me.getPhotourl());
         return me;
     }
