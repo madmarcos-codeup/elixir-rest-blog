@@ -1,6 +1,6 @@
 import {showNotification} from "../messaging.js";
 import {getUser} from "../auth.js";
-import {BACKEND_HOST, BACKEND_PORT} from "../constants.js";
+// import {BACKEND_HOST, BACKEND_PORT} from "../config.js";
 
 const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}/api/s3/download`;
 

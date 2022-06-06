@@ -1,5 +1,7 @@
 import createView from './createView.js';
-import {FRONTEND_VERSION} from "./constants.js";
+// import {FRONTEND_VERSION} from "./config.js";
+const FRONTEND_VERSION = 0.0001;
+
 
 export default function init() {
     loadViewOnPageRequest();

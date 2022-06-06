@@ -1,4 +1,4 @@
-import {BACKEND_HOST, BACKEND_PORT} from "./constants.js";
+// import {BACKEND_HOST, BACKEND_PORT} from "./config.js";
 
 /**
  * Given an object containing all the required data for a given page, fetch all the needed data and return it as properties to pass to a view.
