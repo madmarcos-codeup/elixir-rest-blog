@@ -6,7 +6,7 @@
  * @param request
  * @returns {Promise<{}>}
  */
-const BASE_URI = `http://${BACKEND_HOST}:${BACKEND_PORT}`;
+const BASE_URI = `${BACKEND_HOST}:${BACKEND_PORT}`;
 
 export default function fetchData(state, request) {
     const promises = [];
